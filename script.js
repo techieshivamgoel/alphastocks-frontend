@@ -102,7 +102,7 @@ function predict() {
     .toUpperCase();
 
     loadStockCSV(sym);
-    fetch(`https://alphastocks-ai.onrender.com`)
+    fetch(`https://<your-render-app>.onrender.com/predict/${sym}`)
 
         .then(response => response.json())
         .then(data => {
