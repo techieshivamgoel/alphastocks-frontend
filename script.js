@@ -137,7 +137,9 @@ function predict() {
             }
         })
         .catch(err => {
-            document.getElementById("result").innerText = "Server not running";
+            document.getElementById("result").innerText =
+              "Server is waking up. Please try again in 30 seconds.";
+
             
             document.getElementById("predictionText").innerText=""
             document.getElementById("symbolname").innerText=sym
