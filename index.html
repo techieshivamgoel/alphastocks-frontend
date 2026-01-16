@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlphaStocks AI-Home</title>
+    <link rel="icon" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest">lucide.createIcons()</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+<body>
+    <header style="z-index: 999;">
+
+        <div id="title"><img id="img" src="logo.png">
+            <div id="leftheader">
+                <h2 id="grad"><b>AlphaStocks AI</b></h2>
+
+                <p id="AI"> AI-Powered Market Intelligence</p>
+            </div>
+        </div>
+        <div id="rightnav">
+
+            
+                <h4>Market Status</h4>
+            
+            <p id="open"> •open</p>
+        </div>
+    </header>
+    <br>
+    <section id="search">
+        <div class="ups">
+
+            <div class="autocomplete">
+                <input id="stockname" placeholder="Enter Stock Name">
+                <ul id="suggestions" class="suggestions hidden"></ul>
+            </div>
+
+            <div id="predictbutton" onclick="predict() ;display();loadNews();"><b>Predict</b></div>
+
+        </div>
+        <div class="pop">
+            <p>Popular:</p>
+            <button class="popbut" id="NVIDIA">NVDA</button>
+            <button class="popbut" id="MSFT">MSFT</button>
+            <button class="popbut" id="TESLA">TSLA</button>
+            <button class="popbut" id="GOOGLE">GOOG</button>
+        </div>
+    </section>
+
+
+
+    <section id="resultbox">
+        <div id="prediction">
+            <div id="zapbox"><svg id="zap" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-zap-icon lucide-zap">
+                    <path
+                        d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" />
+                </svg></div>
+            <h4>AI Prediction</h4>
+            <p id="predictionText">Enter a stock name and click Predict to get AI-powered market insights</p>
+            <h3 id="result"></h3>
+        </div>
+    </section><br>
+    <section id="dash">
+        <div id="chartbox">
+            <canvas id="pricechart"></canvas>
+        </div>
+
+
+    </section>
+    <br><br>
+    <section class="indicators">
+        <div class="card">
+            <div class="icon-box">
+                <svg id="avg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 7h6v6" />
+                    <path d="m22 7-8.5 8.5-5-5L2 17" />
+                </svg>
+            </div>
+
+            <p class="label">MOVING AVERAGE</p>
+            <p id="ma100Value" class="value">--</p>
+            <p class="sub">100-day SMA</p>
+        </div>
+
+        <div class="card">
+            <div class="icon-box">
+                <svg id="RSI" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-activity-icon lucide-activity">
+                    <path
+                        d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />
+                </svg>
+            </div>
+            <p class="label">RSI:</p>
+            <p class="value" id="rsiValue">--</p>
+            <p class="sub">Neutral</p>
+        </div>
+        <div class="card">
+            <div class="icon-box">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="lucide lucide-volume2-icon lucide-volume-2">
+                    <path
+                        d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
+                    <path d="M16 9a5 5 0 0 1 0 6" />
+                    <path d="M19.364 18.364a9 9 0 0 0 0-12.728" />
+                </svg>
+            </div>
+            <p class="label">Volume:</p>
+            <p class="value" id="volumeValue">--</p>
+            <p class="sub">Avg. daily volume</p>
+        </div>
+        <div class="card">
+            <div class="icon-box"><svg id="vot" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="lucide lucide-chart-column-icon lucide-chart-column">
+                    <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+                    <path d="M18 17V9" />
+                    <path d="M13 17V5" />
+                    <path d="M8 17v-3" />
+                </svg></div>
+            <p class="label">Volatility:</p>
+            <p class="value" id="volatilityValue">--</p>
+            <p class="sub">30-day historical </p>
+    </section>
+    <script src="script.js"></script>
+
+    <section class="news">
+        <div id="newsbox">
+            <div id="newshead">          
+               RECENT <u>NEWS</u> ABOUT <span id="symbolname"></span>
+               
+            </div>
+            <div class="newsitem" id="news">
+            
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div>
+            Made with &#9829; by Team AlphaCoders
+        </div>
+    </footer>
+
+</body>
+
+</html>
+
+
